@@ -1,25 +1,33 @@
-name: CI/CD avec Vault
+name: CI/CD avec Vault (Demo)
+
 on: [push]
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Récupérer le code
         uses: actions/checkout@v3
+        
       - name: Installer Vault CLI
         run: |
           wget https://releases.hashicorp.com/vault/1.14.0/vault_1.14.0_linux_amd64.zip
           unzip vault_1.14.0_linux_amd64.zip
           sudo mv vault /usr/local/bin/
           vault --version
-      - name: Authentification avec Vault
+          
+      - name: Simulation d'authentification avec Vault
         run: |
-          vault login ${{ secrets.VAULT_TOKEN }}
-          export VAULT_ADDR=http://host.docker.internal:8200
-      - name: Récupérer le secret depuis Vault
+          echo "Simulation de connexion à Vault (démo éducative)"
+          # Dans un environnement réel, nous utiliserions:
+          # vault login ${{ secrets.VAULT_TOKEN }}
+          
+      - name: Simulation de récupération du secret
         run: |
-          API_KEY=$(vault kv get -field=api_key secret/my-app)
-          echo "API_KEY=$API_KEY" >> $GITHUB_ENV
+          # Dans un environnement réel, nous utiliserions:
+          # API_KEY=$(vault kv get -field=api_key secret/my-app)
+          echo "API_KEY=mon-super-secret-simulé" >> $GITHUB_ENV
+          
       - name: Utiliser le secret
         run: |
           echo "Le secret récupéré est : $API_KEY"
