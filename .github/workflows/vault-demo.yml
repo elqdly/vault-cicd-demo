@@ -21,9 +21,12 @@ jobs:
           VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
           VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
         run: |
+          echo "Connecting to Vault at: $VAULT_ADDR"
           vault login $VAULT_TOKEN
           
       - name: Récupérer le secret depuis Vault
+        env:
+          VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
         run: |
           API_KEY=$(vault kv get -field=api_key secret/my-app)
           echo "API_KEY=$API_KEY" >> $GITHUB_ENV
