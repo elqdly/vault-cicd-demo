@@ -1,4 +1,4 @@
-name: CI/CD avec Vault (Demo)
+name: CI/CD avec Vault
 
 on: [push]
 
@@ -16,17 +16,19 @@ jobs:
           sudo mv vault /usr/local/bin/
           vault --version
           
-      - name: Simulation d'authentification avec Vault
+      - name: Authentification avec Vault
+        env:
+          VAULT_ADDR: ${{ secrets.http://localhost:8200 }}
+          VAULT_TOKEN: ${{ secrets.hvs.5gHu3rcJOQ9LIZXMhwfI9U22 }}
         run: |
-          echo "Simulation de connexion à Vault (démo éducative)"
-          # Dans un environnement réel, nous utiliserions:
-          # vault login ${{ secrets.VAULT_TOKEN }}
+          vault login $VAULT_TOKEN
           
-      - name: Simulation de récupération du secret
+      - name: Récupérer le secret depuis Vault
+        env:
+          VAULT_ADDR: ${{ secrets.http://localhost:8200 }}
         run: |
-          # Dans un environnement réel, nous utiliserions:
-          # API_KEY=$(vault kv get -field=api_key secret/my-app)
-          echo "API_KEY=mon-super-secret-simulé" >> $GITHUB_ENV
+          API_KEY=$(vault kv get -field=api_key secret/my-app)
+          echo "API_KEY=$API_KEY" >> $GITHUB_ENV
           
       - name: Utiliser le secret
         run: |
